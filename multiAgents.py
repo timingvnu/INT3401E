@@ -255,32 +255,29 @@ def betterEvaluationFunction(currentGameState: GameState):
     pos = currentGameState.getPacmanPosition()
     food = currentGameState.getFood().asList()
     ghostStates = currentGameState.getGhostStates()
-    capsules = currentGameState.getCapsules()
 
     score = currentGameState.getScore()
 
     if len(food) > 0:
         minFoodDist = min(manhattanDistance(pos, f) for f in food)
+        score += 10.0 / minFoodDist
 
-        score += 10.0 / (minFoodDist + 1)
-
-    score -= 4 * len(food)
-
-    score -= 15 * len(capsules)
     for ghost in ghostStates:
         ghostPos = ghost.getPosition()
         dist = manhattanDistance(pos, ghostPos)
-
-        if ghost.scaredTimer > 0:
-            score += 25.0 / (dist + 1)
-
-        else:
-            if dist <= 1:
-                score -= 500
+        if dist > 0:
+            if ghost.scaredTimer > 0:
+                score += 25.0 / dist
             else:
-                score -= 4.0 / dist
-
+                score -= 10.0 / dist
+        else:
+            """
+            Khi pacman bị ma bắt
+            """
+            score -= 500.0
     return score
+
+    util.raiseNotDefined()
 
 # Abbreviation
 better = betterEvaluationFunction
