@@ -84,7 +84,8 @@ class ReflexAgent(Agent):
                 [manhattanDistance(newPos, food) for food in foodList]
             )
 
-            score += 1.0 / minFoodDist
+            score += 1.0 / (minFoodDist + 1)
+
         for ghostState in newGhostStates:
 
             ghostPos = ghostState.getPosition()
@@ -96,14 +97,13 @@ class ReflexAgent(Agent):
                     score -= 1000
 
                 else:
-                    score -= 2.0 / dist
+                    score -= 2.0 / (dist + 1)
+                
 
             # Ghost scared
             else:
                 score += 2.0 / (dist + 1)
 
-        if action == Directions.STOP:
-            score -= 10
 
         return score
 
